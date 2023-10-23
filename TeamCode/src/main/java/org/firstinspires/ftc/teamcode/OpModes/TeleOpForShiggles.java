@@ -21,9 +21,12 @@ public class TeleOpForShiggles extends OpMode {
     public void init()
     {
         FrontLeftMotor = hardwareMap.get(DcMotorEx.class, "FrontLeftMotor");
+        /*
         FrontRightMotor = hardwareMap.get(DcMotorEx.class, "FrontRightMotor");
         BackRightMotor = hardwareMap.get(DcMotorEx.class, "BackRightMotor");
         BackLeftMotor = hardwareMap.get(DcMotorEx.class, "BackLeftMotor");
+
+         */
 
         Robot.initializeSubsystems(hardwareMap);
     }
@@ -39,6 +42,7 @@ public class TeleOpForShiggles extends OpMode {
     @Override
     public void start()
     {
+        /*
         // Reversing the necessary motors so that the signs of power values match rotational direction
         FrontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         BackLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -48,11 +52,17 @@ public class TeleOpForShiggles extends OpMode {
         FrontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+         */
     }
 
     @Override
     public void loop()
     {
+        FrontLeftMotor.setPower(-1);
+
+
+        /*
         // Maximum power value so we can normalize the power vectors
         double max = 1;
         double y = gamepad1.left_stick_y;
@@ -89,6 +99,8 @@ public class TeleOpForShiggles extends OpMode {
         FrontLeftMotor.setPower(frontLeftPower);
         BackRightMotor.setPower(backRightPower);
         BackLeftMotor.setPower(backLeftPower);
+        */
+
     }
 
     @Override
