@@ -16,17 +16,23 @@ public class TeleOpForShiggles extends OpMode {
     DcMotorEx FrontLeftMotor;
     DcMotorEx BackRightMotor;
     DcMotorEx BackLeftMotor;
-
-    int power = 5;
-    boolean powerChangedFlag = false;
+    DcMotorEx IntakeMotor;
+    DcMotorEx LinkageMotor;
 
     @Override
     public void init()
     {
-        FrontLeftMotor = hardwareMap.get(DcMotorEx.class, "FrontLeftMotor");
-        FrontRightMotor = hardwareMap.get(DcMotorEx.class, "FrontRightMotor");
-        BackRightMotor = hardwareMap.get(DcMotorEx.class, "BackRightMotor");
-        BackLeftMotor = hardwareMap.get(DcMotorEx.class, "BackLeftMotor");
+        FrontLeftMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+        FrontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
+        BackRightMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
+        BackLeftMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
+        IntakeMotor = hardwareMap.get(DcMotorEx.class, "IntakeMotor");
+        LinkageMotor = hardwareMap.get(DcMotorEx.class, "LinkageMotor");
+
+        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        //FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        BackRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        //BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         Robot.initializeSubsystems(hardwareMap);
     }
@@ -42,42 +48,25 @@ public class TeleOpForShiggles extends OpMode {
     @Override
     public void start()
     {
-        // Reversing the necessary motors so that the signs of power values match rotational direction
-        FrontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        BackLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
         // Configure motors so stop when not under load to avoid coasting during TeleOp
         FrontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
     }
 
     @Override
     public void loop()
     {
-        if(gamepad1.dpad_up && power < 10 && !powerChangedFlag)
-        {
-            power += 1;
-            powerChangedFlag = true;
-            telemetry.addLine("Power increased");
-        }
-        else if(gamepad1.dpad_down && power > 1 && !powerChangedFlag)
-        {
-            power -= 1;
-            powerChangedFlag = true;
-            telemetry.addLine("Power decreased");
-        }
-        else if(!gamepad1.dpad_up && !gamepad1.dpad_down){
-            powerChangedFlag = false;
-        }
 
 
         // Maximum power value so we can normalize the power vectors
-        double max;
-        double y = gamepad1.left_stick_y;
+        double max = 1;
+        double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
-        double yaw = gamepad1.right_stick_x * -1;
+        double yaw = gamepad1.right_stick_x;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -98,20 +87,36 @@ public class TeleOpForShiggles extends OpMode {
             backLeftPower   /= max;
             backRightPower  /= max;
         }
-        // Scale the normalized value to the desired power percentage
-        frontLeftPower  *= ((double) power /10);
-        frontRightPower *= ((double) power /10);
-        backLeftPower   *= ((double) power /10);
-        backRightPower  *= ((double) power /10);
+        // Scale the normalized value to the desired power percqentage
+        frontLeftPower  *= 0.5;
+        frontRightPower *= 0.5;
+        backLeftPower   *= 0.5;
+        backRightPower  *= 0.5;
+
+        /*
+        if (gamepad1.y == true) {
+            frontRightPower = 1;
+    }
+        if (gamepad1.x == true) {
+            frontLeftPower = 1;
+        }
+        if (gamepad1.b == true) {
+            backRightPower = 1;
+        }
+        if (gamepad1.a == true) {
+            backLeftPower = 1;
+        }
+        */
+
 
         // Send calculated power to wheels
         FrontRightMotor.setPower(frontRightPower);
         FrontLeftMotor.setPower(frontLeftPower);
         BackRightMotor.setPower(backRightPower);
         BackLeftMotor.setPower(backLeftPower);
+        IntakeMotor.setPower(gamepad2.right_stick_y);
+        LinkageMotor.setPower(gamepad2.left_stick_y * 0.25);
 
-        telemetry.addData("Current Power Multiplier", ((double) power/10));
-        telemetry.update();
     }
 
     @Override
