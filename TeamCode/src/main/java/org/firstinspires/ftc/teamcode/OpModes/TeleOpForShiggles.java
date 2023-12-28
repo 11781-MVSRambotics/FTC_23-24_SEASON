@@ -26,15 +26,13 @@ public class TeleOpForShiggles extends OpMode {
         FrontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
         BackRightMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
         BackLeftMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
-        IntakeMotor = hardwareMap.get(DcMotorEx.class, "IntakeMotor");
-        LinkageMotor = hardwareMap.get(DcMotorEx.class, "LinkageMotor");
+        //IntakeMotor = hardwareMap.get(DcMotorEx.class, "IntakeMotor");
+        //LinkageMotor = hardwareMap.get(DcMotorEx.class, "LinkageMotor");
 
-        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        //FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         //FrontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        BackRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        //BackRightMotor.setDirection(DcMotor.Direction.REVERSE);
         //BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        Robot.initializeSubsystems(hardwareMap);
     }
 
 
@@ -114,8 +112,8 @@ public class TeleOpForShiggles extends OpMode {
         FrontLeftMotor.setPower(frontLeftPower);
         BackRightMotor.setPower(backRightPower);
         BackLeftMotor.setPower(backLeftPower);
-        IntakeMotor.setPower(gamepad2.right_stick_y);
-        LinkageMotor.setPower(gamepad2.left_stick_y * 0.25);
+        //IntakeMotor.setPower(gamepad2.right_stick_y);
+        //LinkageMotor.setPower(gamepad2.left_stick_y * 0.25);
 
     }
 
