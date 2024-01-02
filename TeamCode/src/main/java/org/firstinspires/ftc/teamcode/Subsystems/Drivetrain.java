@@ -4,14 +4,15 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.CustomMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public enum Drivetrain implements Subsystem {SINGLETON;
 
-    CustomMecanumDrive drivetrain;
+    SampleMecanumDrive drivetrain;
 
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {
-        drivetrain = new CustomMecanumDrive(hardwareMap);
+        drivetrain = new SampleMecanumDrive(hardwareMap);
     }
 
     public void MoveTeleOp(double x, double y, double yaw)
