@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -24,13 +25,16 @@ public class CompetitionTeleOp extends OpMode {
     {
         Robot.initializeSubsystems(hardwareMap);
 
-        linkageMotor = hardwareMap.get(DcMotorEx.class, "linkageMotor");
+        linkageMotor = hardwareMap.get(DcMotorEx.class, "linkageMotorLeft");
         flywheelLeft = hardwareMap.get(CRServo.class, "flywheelLeft");
         flywheelRight = hardwareMap.get(CRServo.class, "flywheelRight");
         wristLeft = hardwareMap.get(Servo.class, "wrightLeft");
         wristRight = hardwareMap.get(Servo.class, "wrightRight");
         latchLeft = hardwareMap.get(Servo.class, "latchLeft");
         latchRight = hardwareMap.get(Servo.class, "latchRight");
+
+        linkageMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkageMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -84,13 +88,14 @@ public class CompetitionTeleOp extends OpMode {
 
         if (gamepad1.right_trigger > 0)
         {
-            linkageMotor.setPower(0.5);
+            linkageMotor.setPower(gamepad1.right_trigger);
         }
-
-
-        if (gamepad1.left_trigger > 0)
+        else if (gamepad1.left_trigger > 0)
         {
-            linkageMotor.setPower(-0.5);
+            linkageMotor.setPower(-gamepad1.left_trigger);
+        }
+        else {
+            linkageMotor.setPower(0);
         }
 
     }
