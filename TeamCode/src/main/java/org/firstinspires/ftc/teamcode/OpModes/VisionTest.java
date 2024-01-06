@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
+import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class VisionTest extends OpMode {
 
     @Override
     public void loop() {
+
+        TfodProcessor t = TfodProcessor.easyCreateWithDefaults();
+
         telemetry.addData("Right cam fps: ", CameraArray.vp_right.getFps());
         telemetry.addData("Left cam fps: ", CameraArray.vp_left.getFps());
     }
