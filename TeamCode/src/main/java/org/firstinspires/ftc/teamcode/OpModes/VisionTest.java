@@ -1,24 +1,43 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import android.util.Size;
 
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
+import org.firstinspires.ftc.vision.VisionPortal;
 
-import java.util.List;
-
-@TeleOp
+@Autonomous
 public class VisionTest extends OpMode {
+
+    long averageTimeDifference = -1;
+
     @Override
     public void init() {
-        Robot.initializeSubsystems(hardwareMap);
+        CameraArray.INSTANCE.initializeHardware(hardwareMap);
+    }
+
+    @Override
+    public void init_loop() {
+    }
+
+    @Override
+    public void start() {
+
     }
 
     @Override
     public void loop() {
-        telemetry.addData("Right cam fps: ", CameraArray.vp_right.getFps());
-        telemetry.addData("Left cam fps: ", CameraArray.vp_left.getFps());
+
+        //CameraArray.INSTANCE.calculateDepthmap();
+    }
+
+    @Override
+    public void stop() {
+        FtcDashboard.getInstance().clearTelemetry();
     }
 }

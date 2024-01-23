@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public enum Robot { SINGLETON;
 
-    private static List<? extends Subsystem> subsystems = Arrays.asList(Drivetrain.SINGLETON, CameraArray.SINGLETON);
+    private static List<? extends Subsystem> subsystems = Arrays.asList(CameraArray.INSTANCE);
 
     public static void initializeSubsystems(HardwareMap hardwareMap)
     {
