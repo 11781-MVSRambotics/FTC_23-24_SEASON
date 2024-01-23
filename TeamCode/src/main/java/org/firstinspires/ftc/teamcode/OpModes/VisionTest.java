@@ -22,7 +22,7 @@ public class VisionTest extends OpMode {
 
         TfodProcessor t = TfodProcessor.easyCreateWithDefaults();
 
-        telemetry.addData("Right cam fps: ", CameraArray.vp_right.getFps());
-        telemetry.addData("Left cam fps: ", CameraArray.vp_left.getFps());
+        //telemetry.addData("Right cam fps: ", CameraArray.vp_right.getFps());
+        //telemetry.addData("Left cam fps: ", CameraArray.vp_left.getFps());
     }
 }

@@ -49,12 +49,14 @@ public class CompetitionTeleOp extends OpMode {
         linkageMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         linkageMotorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        linkageMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkageMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkageMotorLeft.setTargetPosition(0);
+        linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkageMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         linkageMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        linkageMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkageMotorRight.setTargetPosition(0);
+        linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 
     }
@@ -64,13 +66,14 @@ public class CompetitionTeleOp extends OpMode {
     {
         Drivetrain.SINGLETON.MoveTeleOp(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
+        /*
         // Wrist toggled by gamepad A
         if(gamepad1.a && !wristUp) { // A is pressed and wrist is down (raise it)
-            //wristRight.setPosition(0.6);
-            wristLeft.setPosition(1);
+            wristRight.setPosition(0.4);
+            wristLeft.setPosition(0.4);
             aWasPressed = true;
         } else if(gamepad1.a && wristUp) { // A is pressed and wrist is up (drop it)
-            //wristRight.setPosition(0.4);
+            wristRight.setPosition(0.3);
             wristLeft.setPosition(0.3);
             aWasPressed = true;
         } else if(!gamepad1.a && aWasPressed){ // A isn't pressed but was (toggle state)
@@ -105,27 +108,65 @@ public class CompetitionTeleOp extends OpMode {
             intakeOpen = !intakeOpen;
             xWasPressed = false;
         }
+         */
 
-        // Release the plane
-        if(gamepad1.y) {
-            planeLatch.setPosition(0);
+
+
+        if(gamepad1.right_bumper) {
+            linkageMotorLeft.setTargetPosition(50);
+            linkageMotorRight.setTargetPosition(50);
+            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setPower(1);
+            linkageMotorLeft.setPower(1);
+        } else if(gamepad1.left_bumper) {
+            linkageMotorLeft.setTargetPosition(0);
+            linkageMotorRight.setTargetPosition(0);
+            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setPower(0.1);
+            linkageMotorLeft.setPower(0.1);
         }
 
-        // 4-Bar is on the triggers
-        if (gamepad1.right_trigger > 0) {
-            linkageMotorLeft.setPower(gamepad1.right_trigger);
+        /*
+        if(gamepad1.right_trigger > 0) {
+            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            linkageMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             linkageMotorRight.setPower(gamepad1.right_trigger);
-        } else if (gamepad1.left_trigger > 0) {
-            linkageMotorLeft.setPower(-gamepad1.left_trigger);
+            linkageMotorLeft.setPower(gamepad1.right_trigger);
+            telemetry.addData("Up", " Please");
+        } else if(gamepad1.left_trigger > 0) {
+            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            linkageMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             linkageMotorRight.setPower(-gamepad1.left_trigger);
+            linkageMotorLeft.setPower(-gamepad1.left_trigger);
+            telemetry.addData("Down", " Please");
         } else {
-            linkageMotorLeft.setPower(0.01);
-            linkageMotorRight.setPower(0.01);
+            linkageMotorLeft.setTargetPosition(linkageMotorLeft.getCurrentPosition());
+            linkageMotorRight.setTargetPosition(linkageMotorRight.getCurrentPosition());
+            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linkageMotorRight.setPower(0.1);
+            linkageMotorLeft.setPower(0.1);
+            telemetry.addData("Stop", " Please");
         }
+
+        // Release the icon of sin
+        if(gamepad1.y) {
+            latchLeft.setPosition(1);
+        } else {
+            latchLeft.setPosition(0);
+        }
+
+         */
 
         telemetry.addData("WristUp", wristUp);
         telemetry.addData("LatchOpen", latchOpen);
         telemetry.addData("IntakeOpen", intakeOpen);
+        telemetry.addData("LeftLink Encoder", linkageMotorLeft.getCurrentPosition());
+        telemetry.addData("RightLink Encoder", linkageMotorRight.getCurrentPosition());
+        telemetry.addData("LeftLink Target", linkageMotorLeft.getTargetPosition());
+        telemetry.addData("RightLink Target", linkageMotorRight.getTargetPosition());
         telemetry.update();
     }
 }

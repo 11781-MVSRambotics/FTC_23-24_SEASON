@@ -3,24 +3,29 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import android.annotation.SuppressLint;
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-public class CompetitionAutonomous extends OpMode {
+@Autonomous
+public class CompetitionAutonomousRight extends OpMode {
 
     Servo wristLeft, wristRight, latchLeft, latchRight, planeLatch, intakeLeft, intakeRight;;
     DcMotorEx linkageMotorLeft, linkageMotorRight;
     VisionPortal vp;
     TfodProcessor tf;
+
+    ElapsedTime pain = new ElapsedTime();
 
     @SuppressLint("SdCardPath")
     public static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/BlooBoi_Proto.tflite";
@@ -60,6 +65,8 @@ public class CompetitionAutonomous extends OpMode {
         linkageMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+
+
         tf = new TfodProcessor.Builder()
                 .setModelFileName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
@@ -74,10 +81,14 @@ public class CompetitionAutonomous extends OpMode {
                 .enableLiveView(false)
                 .addProcessor(tf)
                 .build();
+
+
     }
 
     @Override
     public void loop() {
-
+        while(pain.time() - pain.startTime() < 3) {
+            Drivetrain.SINGLETON.MoveTeleOp(1, 0, 0); // Right
+        }
     }
 }
