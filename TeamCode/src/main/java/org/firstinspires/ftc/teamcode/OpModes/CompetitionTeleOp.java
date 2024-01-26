@@ -30,8 +30,8 @@ public class CompetitionTeleOp extends OpMode {
         linkageMotorRight = hardwareMap.get(DcMotorEx.class, "linkageMotorRight");
         //intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
         //intakeRight = hardwareMap.get(Servo.class, "intakeRight");
-        //wristLeft = hardwareMap.get(Servo.class, "wristLeft");
-        //wristRight = hardwareMap.get(Servo.class, "wristRight");
+        wristLeft = hardwareMap.get(Servo.class, "wristLeft");
+        wristRight = hardwareMap.get(Servo.class, "wristRight");
         //latchLeft = hardwareMap.get(Servo.class, "latchLeft");
         //latchRight = hardwareMap.get(Servo.class, "latchRight");
         //planeLatch = hardwareMap.get(Servo.class, "planeLatch");
@@ -47,14 +47,12 @@ public class CompetitionTeleOp extends OpMode {
         linkageMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
     }
 
     @Override
     public void loop()
     {
         Drivetrain.SINGLETON.MoveTeleOp(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-
         /*
         // Wrist toggled by gamepad A
         if(gamepad1.a && !wristUp) { // A is pressed and wrist is down (raise it)
@@ -99,7 +97,8 @@ public class CompetitionTeleOp extends OpMode {
         }
          */
 
-
+        if (gamepad1.a){wristLeft.setPosition(1);}
+        if (gamepad1.b){wristLeft.setPosition(0.8);}
 
         if(gamepad1.right_bumper) {
             linkageMotorRight.setPower(1);
@@ -144,6 +143,8 @@ public class CompetitionTeleOp extends OpMode {
 
          */
 
+        telemetry.addData("wrist_left", wristLeft.getController().getServoPosition(0));
+        telemetry.addData("wrist_right", wristRight.getController().getServoPosition(1));
         telemetry.addData("WristUp", wristUp);
         telemetry.addData("LatchOpen", latchOpen);
         telemetry.addData("IntakeOpen", intakeOpen);
