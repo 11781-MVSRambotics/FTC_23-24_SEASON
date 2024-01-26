@@ -1,24 +1,24 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import android.util.Size;
+import android.hardware.camera2.CameraAccessException;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
-import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.teamcode.vision.CameraArray;
 
 @Autonomous
 public class VisionTest extends OpMode {
 
+    CameraArray c;
     long averageTimeDifference = -1;
 
     @Override
     public void init() {
-        CameraArray.INSTANCE.initializeHardware(hardwareMap);
+        c = new CameraArray();
     }
 
     @Override
@@ -33,7 +33,8 @@ public class VisionTest extends OpMode {
     @Override
     public void loop() {
 
-        //CameraArray.INSTANCE.calculateDepthmap();
+        FtcDashboard.getInstance().getTelemetry().addData("CameraManager webcams", 0);
+        FtcDashboard.getInstance().getTelemetry().update();
     }
 
     @Override

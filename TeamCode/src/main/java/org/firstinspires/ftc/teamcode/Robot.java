@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Subsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public enum Robot { SINGLETON;
 
-    private static List<? extends Subsystem> subsystems = Arrays.asList(CameraArray.INSTANCE);
+    private static List<? extends Subsystem> subsystems = Arrays.asList();
 
     public static void initializeSubsystems(HardwareMap hardwareMap)
     {
