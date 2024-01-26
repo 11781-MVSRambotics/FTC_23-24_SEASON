@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 @SuppressWarnings("unused")
 public class CompetitionTeleOp extends OpMode {
 
-    Servo wristLeft, wristRight, latchLeft, latchRight, planeLatch, intakeLeft, intakeRight;;
+    Servo wristLeft, wristRight, latchLeft, latchRight, planeLatch, intakeLeft, intakeRight;
     DcMotorEx linkageMotorLeft, linkageMotorRight;
 
     boolean aWasPressed = false, wristUp = false;
@@ -28,35 +28,24 @@ public class CompetitionTeleOp extends OpMode {
 
         linkageMotorLeft = hardwareMap.get(DcMotorEx.class, "linkageMotorLeft");
         linkageMotorRight = hardwareMap.get(DcMotorEx.class, "linkageMotorRight");
-        intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
-        intakeRight = hardwareMap.get(Servo.class, "intakeRight");
-        wristLeft = hardwareMap.get(Servo.class, "wristLeft");
-        wristRight = hardwareMap.get(Servo.class, "wristRight");
-        latchLeft = hardwareMap.get(Servo.class, "latchLeft");
-        latchRight = hardwareMap.get(Servo.class, "latchRight");
-        planeLatch = hardwareMap.get(Servo.class, "planeLatch");
-
-        wristRight.setDirection(Servo.Direction.FORWARD);
-        wristLeft.setDirection(Servo.Direction.REVERSE);
-
-        latchRight.setDirection(Servo.Direction.FORWARD);
-        latchLeft.setDirection(Servo.Direction.REVERSE);
-
-        intakeRight.setDirection(Servo.Direction.REVERSE);
-        intakeLeft.setDirection(Servo.Direction.FORWARD);
+        //intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
+        //intakeRight = hardwareMap.get(Servo.class, "intakeRight");
+        //wristLeft = hardwareMap.get(Servo.class, "wristLeft");
+        //wristRight = hardwareMap.get(Servo.class, "wristRight");
+        //latchLeft = hardwareMap.get(Servo.class, "latchLeft");
+        //latchRight = hardwareMap.get(Servo.class, "latchRight");
+        //planeLatch = hardwareMap.get(Servo.class, "planeLatch");
 
         linkageMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkageMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         linkageMotorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        linkageMotorLeft.setTargetPosition(0);
-        linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linkageMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linkageMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkageMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         linkageMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        linkageMotorRight.setTargetPosition(0);
-        linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linkageMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
     }
@@ -113,19 +102,14 @@ public class CompetitionTeleOp extends OpMode {
 
 
         if(gamepad1.right_bumper) {
-            linkageMotorLeft.setTargetPosition(50);
-            linkageMotorRight.setTargetPosition(50);
-            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linkageMotorRight.setPower(1);
             linkageMotorLeft.setPower(1);
         } else if(gamepad1.left_bumper) {
-            linkageMotorLeft.setTargetPosition(0);
-            linkageMotorRight.setTargetPosition(0);
-            linkageMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linkageMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linkageMotorRight.setPower(0.1);
-            linkageMotorLeft.setPower(0.1);
+            linkageMotorRight.setPower(-1);
+            linkageMotorLeft.setPower(-1);
+        } else {
+            linkageMotorRight.setPower(0);
+            linkageMotorLeft.setPower(0);
         }
 
         /*
