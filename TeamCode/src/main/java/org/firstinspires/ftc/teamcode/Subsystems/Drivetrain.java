@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public enum Drivetrain implements Subsystem {SINGLETON;
 
-    SampleMecanumDrive drivetrain;
+    private static SampleMecanumDrive drivetrain;
 
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {
         drivetrain = new SampleMecanumDrive(hardwareMap);
     }
 
-    public void MoveTeleOp(double x, double y, double yaw)
+    public static void MoveTeleOp(double x, double y, double yaw)
     {
         // Converting from joystick convention to roadrunner convention
         // ↳ positive x is forward, positive y is left, positive heading is counterclockwise

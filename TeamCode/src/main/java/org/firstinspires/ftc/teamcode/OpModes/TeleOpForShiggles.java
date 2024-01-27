@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
@@ -18,6 +19,8 @@ public class TeleOpForShiggles extends OpMode {
     DcMotorEx BackLeftMotor;
     DcMotorEx IntakeMotor;
     DcMotorEx LinkageMotor;
+
+    Servo servo;
 
     @Override
     public void init()
