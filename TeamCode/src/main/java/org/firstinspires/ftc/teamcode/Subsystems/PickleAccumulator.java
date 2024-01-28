@@ -22,11 +22,15 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
         fourBarRight.setDirection(DcMotorSimple.Direction.REVERSE);
         fourBarLeft.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        lowerFourBar();
+
         wristRight = hardwareMap.get(Servo.class, "wristRight");
         wristLeft = hardwareMap.get(Servo.class, "wristLeft");
 
         wristRight.setDirection(Servo.Direction.FORWARD);
         wristLeft.setDirection(Servo.Direction.REVERSE);
+
+        lowerBasket();
 
         intakeRight = hardwareMap.get(Servo.class, "intakeRight");
         intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
@@ -34,7 +38,13 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
         intakeRight.setDirection(Servo.Direction.REVERSE);
         intakeLeft.setDirection(Servo.Direction.FORWARD);
 
+        closeIntake();
+
         output = hardwareMap.get(Servo.class, "output");
+
+        output.setDirection(Servo.Direction.REVERSE);
+
+        closeOutput();
     }
 
     public static int getFourBarPosition() {
@@ -42,7 +52,7 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
     }
 
     public static void raiseBasket() {
-        double BASKET_RAISED_POSITION = 1;
+        double BASKET_RAISED_POSITION = 0.375;
         wristRight.setPosition(BASKET_RAISED_POSITION);
         wristLeft.setPosition(BASKET_RAISED_POSITION);
     }
@@ -66,12 +76,12 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
     }
 
     public static void openOutput() {
-        double OUTPUT_OPEN_POSITION = 1;
+        double OUTPUT_OPEN_POSITION = 0.75;
         output.setPosition(OUTPUT_OPEN_POSITION);
     }
 
     public static void closeOutput() {
-        double OUTPUT_CLOSED_POSITION = 0;
+        double OUTPUT_CLOSED_POSITION = 0.3;
         output.setPosition(OUTPUT_CLOSED_POSITION);
     }
 
