@@ -10,9 +10,16 @@ public enum Drivetrain implements Subsystem {SINGLETON;
 
     private static SampleMecanumDrive drivetrain;
 
+    private static boolean isInitialized = false;
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {
         drivetrain = new SampleMecanumDrive(hardwareMap);
+        isInitialized = true;
     }
 
     public static void MoveTeleOp(double x, double y, double yaw)

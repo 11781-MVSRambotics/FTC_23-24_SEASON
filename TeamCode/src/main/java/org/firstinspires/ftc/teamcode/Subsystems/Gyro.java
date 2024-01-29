@@ -10,6 +10,12 @@ public enum Gyro implements Subsystem {SINGLETON;
 
     private IMU imu;
 
+    private static boolean isInitialized = false;
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
     @Override
     public void initializeHardware(HardwareMap hardwareMap)
     {
@@ -21,6 +27,7 @@ public enum Gyro implements Subsystem {SINGLETON;
                 )
         );
         imu.initialize(parameters);
+        isInitialized = true;
     }
 
     public double getRawExternalHeading() {

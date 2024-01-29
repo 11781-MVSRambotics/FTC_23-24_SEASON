@@ -11,6 +11,12 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
     private static DcMotorEx fourBarLeft, fourBarRight;
     private static Servo wristLeft, wristRight, intakeLeft, intakeRight, output;
 
+    private static boolean isInitialized = false;
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {
         fourBarRight = hardwareMap.get(DcMotorEx.class, "fourBarRight");
@@ -45,6 +51,8 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
         output.setDirection(Servo.Direction.REVERSE);
 
         closeOutput();
+
+        isInitialized = true;
     }
 
     public static int getFourBarPosition() {
