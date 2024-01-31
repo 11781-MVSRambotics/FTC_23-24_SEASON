@@ -17,7 +17,7 @@ public class CompetitionTeleOp extends OpMode {
     private boolean aWasPressed = false, basketUp = false;
     private boolean bWasPressed = false, intakeOpen = false;
     private boolean xWasPressed = false, outputOpen = false;
-    private boolean yWasPressed = false, camerasStreaming = true;
+    private boolean yWasPressed = false;
 
     @Override
     public void init()
@@ -28,7 +28,21 @@ public class CompetitionTeleOp extends OpMode {
     @Override
     public void loop()
     {
-        Drivetrain.MoveTeleOp(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        if (gamepad1.dpad_up) {
+            Drivetrain.MoveTeleOp(0, -0.2, 0);
+        }
+        else if (gamepad1.dpad_down) {
+            Drivetrain.MoveTeleOp(0, 0.2, 0);
+        }
+        else if (gamepad1.dpad_right) {
+            Drivetrain.MoveTeleOp(0.3, 0, 0);
+        }
+        else if (gamepad1.dpad_left) {
+            Drivetrain.MoveTeleOp(-0.3, 0, 0);
+        }
+        else {
+            Drivetrain.MoveTeleOp(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        }
 
         if(gamepad1.right_trigger > 0) {
             PickleAccumulator.raiseFourBar(gamepad1.right_trigger);
@@ -79,14 +93,13 @@ public class CompetitionTeleOp extends OpMode {
             xWasPressed = false;
         }
 
-        if(gamepad1.y && !camerasStreaming) { // Y is pressed and cameras are stopped (start them)
+        if(gamepad1.y && !CameraArray.isSteaming()) { // Y is pressed and cameras are stopped (start them)
             CameraArray.resumeStreaming();
             yWasPressed = true;
-        } else if(gamepad1.y && camerasStreaming) { // Y is pressed and cameras are streaming (stop them)
+        } else if(gamepad1.y && CameraArray.isSteaming()) { // Y is pressed and cameras are streaming (stop them)
             CameraArray.stopStreaming();
             yWasPressed = true;
         } else if(!gamepad1.y && yWasPressed){ // Y isn't pressed but was (toggle state)
-            camerasStreaming = !camerasStreaming;
             yWasPressed = false;
         }
 

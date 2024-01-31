@@ -29,9 +29,11 @@ import java.util.List;
 
 public enum CameraArray implements Subsystem {SINGLETON;
 
+    private static boolean isStreaming = true;
+
     @SuppressLint("SdCardPath")
-    public static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/BlooBoi_Proto.tflite";
-    public static final String[] LABELS = {"Blooboi"};
+    private static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/BlooBoi_Proto.tflite";
+    private static final String[] LABELS = {"Blooboi"};
 
     private static VisionPortal rightPortal;
     private static VisionPortal leftPortal;
@@ -82,6 +84,8 @@ public enum CameraArray implements Subsystem {SINGLETON;
 
         rightPortal.stopStreaming();
         leftPortal.stopStreaming();
+
+        isStreaming = false;
     }
 
     public static void resumeStreaming() {
@@ -90,5 +94,11 @@ public enum CameraArray implements Subsystem {SINGLETON;
 
         rightPortal.resumeLiveView();
         leftPortal.resumeLiveView();
+
+        isStreaming = true;
+    }
+
+    public static boolean isSteaming() {
+        return isStreaming;
     }
 }
