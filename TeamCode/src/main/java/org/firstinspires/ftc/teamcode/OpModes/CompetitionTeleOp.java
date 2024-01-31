@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.PickleAccumulator;
 
@@ -16,6 +17,7 @@ public class CompetitionTeleOp extends OpMode {
     private boolean aWasPressed = false, basketUp = false;
     private boolean bWasPressed = false, intakeOpen = false;
     private boolean xWasPressed = false, outputOpen = false;
+    private boolean yWasPressed = false, camerasStreaming = true;
 
     @Override
     public void init()
@@ -75,6 +77,17 @@ public class CompetitionTeleOp extends OpMode {
         } else if(!gamepad1.x && xWasPressed){ // X isn't pressed but was (toggle state)
             outputOpen = !outputOpen;
             xWasPressed = false;
+        }
+
+        if(gamepad1.y && !camerasStreaming) { // Y is pressed and cameras are stopped (start them)
+            CameraArray.resumeStreaming();
+            yWasPressed = true;
+        } else if(gamepad1.y && camerasStreaming) { // Y is pressed and cameras are streaming (stop them)
+            CameraArray.stopStreaming();
+            yWasPressed = true;
+        } else if(!gamepad1.y && yWasPressed){ // Y isn't pressed but was (toggle state)
+            camerasStreaming = !camerasStreaming;
+            yWasPressed = false;
         }
 
         telemetry.addData("Four bar position", PickleAccumulator.getFourBarPosition());

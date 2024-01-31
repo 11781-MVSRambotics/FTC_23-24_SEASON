@@ -11,6 +11,9 @@ import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionPortalImpl;
+import org.firstinspires.ftc.vision.VisionProcessor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -26,23 +29,66 @@ import java.util.List;
 
 public enum CameraArray implements Subsystem {SINGLETON;
 
-    static OpenCvWebcam leftCam;
-    static OpenCvWebcam rightCam;
+    @SuppressLint("SdCardPath")
+    public static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/BlooBoi_Proto.tflite";
+    public static final String[] LABELS = {"Blooboi"};
+
+    private static VisionPortal rightPortal;
+    private static VisionPortal leftPortal;
+
+    private static AprilTagProcessor atProcessor;
+    private static TfodProcessor tfProcessor;
 
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {
-        leftCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "leftCam"));
-        rightCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "rightCam"));
 
+        startProcessors();
+
+        int[] previewIDs = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+
+        rightPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "rightCam"))
+                .setCameraResolution(new Size(640, 480))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .enableLiveView(true)
+                .setLiveViewContainerId(previewIDs[0])
+                .addProcessor(tfProcessor)
+                .build();
+        leftPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "leftCam"))
+                .setCameraResolution(new Size(640, 480))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .enableLiveView(true)
+                .setLiveViewContainerId(previewIDs[1])
+                .addProcessor(atProcessor)
+                .build();
     }
 
-    private void requestBitmap(OpenCvWebcam cam) {
-        
-        Continuation<? extends Consumer<Bitmap>> continuation = Continuation.createTrivial(new Consumer<Bitmap>() {
-            @Override
-            public void accept(Bitmap value) {
+    private static void startProcessors() {
+        atProcessor = new AprilTagProcessor.Builder() // Figure this out later
+                .build();
 
-            }
-        });
+        tfProcessor = new TfodProcessor.Builder()
+                .setModelFileName(TFOD_MODEL_ASSET)
+                .setMaxNumRecognitions(1)
+                .setModelLabels(LABELS)
+                .build();
+        tfProcessor.setMinResultConfidence(0.8f);
+    }
+
+    public static void stopStreaming() {
+        rightPortal.stopLiveView();
+        leftPortal.stopLiveView();
+
+        rightPortal.stopStreaming();
+        leftPortal.stopStreaming();
+    }
+
+    public static void resumeStreaming() {
+        rightPortal.resumeStreaming();
+        leftPortal.resumeStreaming();
+
+        rightPortal.resumeLiveView();
+        leftPortal.resumeLiveView();
     }
 }

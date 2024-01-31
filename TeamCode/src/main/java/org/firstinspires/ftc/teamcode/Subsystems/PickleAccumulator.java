@@ -86,7 +86,7 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
     }
 
     public static void raiseFourBar() {
-        int FOURBAR_RAISED_POSITION = 3000;
+        int FOURBAR_RAISED_POSITION = 3500;
         fourBarRight.setTargetPosition(FOURBAR_RAISED_POSITION);
         fourBarLeft.setTargetPosition(FOURBAR_RAISED_POSITION);
 
