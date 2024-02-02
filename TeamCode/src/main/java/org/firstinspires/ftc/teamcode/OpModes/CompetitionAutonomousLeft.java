@@ -140,7 +140,7 @@ public class CompetitionAutonomousLeft extends OpMode {
                 .forward(23)
                 .back(10)
                 .build();
-        
+
 
         Drivetrain.drivetrain.followTrajectorySequence(traj1);
         //Drivetrain.drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 1));
