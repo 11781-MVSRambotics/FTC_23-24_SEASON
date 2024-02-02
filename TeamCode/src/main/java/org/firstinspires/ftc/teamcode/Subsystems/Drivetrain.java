@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public enum Drivetrain implements Subsystem {SINGLETON;
 
-    private static SampleMecanumDrive drivetrain;
+    public static SampleMecanumDrive drivetrain;
 
     @Override
     public void initializeHardware(HardwareMap hardwareMap) {

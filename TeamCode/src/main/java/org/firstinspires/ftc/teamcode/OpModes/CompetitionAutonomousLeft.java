@@ -3,6 +3,12 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import android.annotation.SuppressLint;
 import android.util.Size;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.drive.Drive;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +20,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.Subsystems.PickleAccumulator;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -35,6 +43,7 @@ public class CompetitionAutonomousLeft extends OpMode {
     public void init() {
         Robot.initializeSubsystems(hardwareMap);
 
+        /*
         linkageMotorLeft = hardwareMap.get(DcMotorEx.class, "linkageMotorLeft");
         linkageMotorRight = hardwareMap.get(DcMotorEx.class, "linkageMotorRight");
         intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
@@ -44,6 +53,8 @@ public class CompetitionAutonomousLeft extends OpMode {
         latchLeft = hardwareMap.get(Servo.class, "latchLeft");
         latchRight = hardwareMap.get(Servo.class, "latchRight");
         planeLatch = hardwareMap.get(Servo.class, "planeLatch");
+
+
 
         wristRight.setDirection(Servo.Direction.FORWARD);
         wristLeft.setDirection(Servo.Direction.REVERSE);
@@ -83,12 +94,79 @@ public class CompetitionAutonomousLeft extends OpMode {
                 .build();
 
 
+         */
+
     }
 
     @Override
-    public void loop() {
-        while(pain.time() - pain.startTime() < 3) {
-            Drivetrain.SINGLETON.MoveTeleOp(-1, 0, 0); // Left
+    public void start(){
+        Pose2d startPose = new Pose2d(0, 0, 0);
+        Drivetrain.drivetrain.setPoseEstimate(startPose);
+
+        /* Defines a filler int variable that will be which tape that the pickle starts at.
+        1 is the tape straight ahead, 2 is to the left, 3 is to the right (This is just for testing)
+        */
+        int tapePos = 1;
+
+
+        // A switch statement that will run a different trajectory based on the Tape
+        /*
+        switch (tapePos) {
+            case 1:
+                Drivetrain.drivetrain.followTrajectory(traj1);
+            case 2:
+                Drivetrain.drivetrain.turn(Math.toRadians(45));
+                Drivetrain.drivetrain.followTrajectory(traj1);
+            case 3:
+                Drivetrain.drivetrain.turn(Math.toRadians(-45));
+                Drivetrain.drivetrain.followTrajectory(traj1);
+        */
+
+        TrajectorySequence traj1 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+                .forward(35)
+                .build();
+
+        TrajectorySequence traj2 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+                .forward(30)
+                .strafeRight(40)
+                .forward(20)
+                .strafeLeft(40)
+                .build();
+
+        TrajectorySequence traj3 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+                .forward(20)
+                .setTurnConstraint(10, 1)
+                .turn(Math.toRadians(-90))
+                .forward(23)
+                .back(10)
+                .build();
+        
+
+        Drivetrain.drivetrain.followTrajectorySequence(traj1);
+        //Drivetrain.drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 1));
+        //Drivetrain.drivetrain.turn(Math.toRadians(90));
+        //Drivetrain.drivetrain.followTrajectory(traj2);
+
+        //Drivetrain.drivetrain.followTrajectory(traj1);
+
+        //Drivetrain.drivetrain.turn(Math.toRadians(-45));
+        //Drivetrain.drivetrain.followTrajectory(traj1);
+
         }
+
+    @Override
+    public void loop() {
+
     }
+
+        /*
+        Drivetrain.drivetrain.followTrajectory(traj1);
+        PickleAccumulator.openIntake();
+        telemetry.addData("position", Drivetrain.drivetrain.getPoseEstimate());
+        telemetry.update();
+        //Drivetrain.drivetrain.followTrajectory(traj2);
+        telemetry.addData("position", Drivetrain.drivetrain.getPoseEstimate());
+        telemetry.update();
+        */
+
 }
