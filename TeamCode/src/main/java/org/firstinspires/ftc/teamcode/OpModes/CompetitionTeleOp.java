@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.PickleAccumulator;
 
-@TeleOp
+@TeleOp(name = "TeleOp", group = "Competition")
 @SuppressWarnings("unused")
 public class CompetitionTeleOp extends OpMode {
 
@@ -17,7 +17,6 @@ public class CompetitionTeleOp extends OpMode {
     private boolean aWasPressed = false, basketUp = false;
     private boolean bWasPressed = false, intakeOpen = false;
     private boolean xWasPressed = false, outputOpen = false;
-    private boolean yWasPressed = false;
 
     @Override
     public void init()
@@ -93,16 +92,7 @@ public class CompetitionTeleOp extends OpMode {
             xWasPressed = false;
         }
 
-        if(gamepad1.y && !CameraArray.isSteaming()) { // Y is pressed and cameras are stopped (start them)
-            CameraArray.resumeStreaming();
-            yWasPressed = true;
-        } else if(gamepad1.y && CameraArray.isSteaming()) { // Y is pressed and cameras are streaming (stop them)
-            CameraArray.stopStreaming();
-            yWasPressed = true;
-        } else if(!gamepad1.y && yWasPressed){ // Y isn't pressed but was (toggle state)
-            yWasPressed = false;
-        }
-
+        telemetry.addData("Hell on earth", CameraArray.getGameElementPosition());
         telemetry.addData("Four bar position", PickleAccumulator.getFourBarPosition());
         telemetry.update();
     }

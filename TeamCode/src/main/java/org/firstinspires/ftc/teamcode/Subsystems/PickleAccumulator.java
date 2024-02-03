@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.ConfigurationType;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 public enum PickleAccumulator implements Subsystem { SINGLETON;
 
@@ -21,6 +23,9 @@ public enum PickleAccumulator implements Subsystem { SINGLETON;
 
         fourBarRight.setDirection(DcMotorSimple.Direction.REVERSE);
         fourBarLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        fourBarRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fourBarLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         lowerFourBar();
 

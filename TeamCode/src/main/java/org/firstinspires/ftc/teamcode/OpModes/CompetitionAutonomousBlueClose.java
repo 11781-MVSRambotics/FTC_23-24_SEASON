@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.Subsystems.CameraArray;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.PickleAccumulator;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -28,78 +29,42 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 @Autonomous
 public class CompetitionAutonomousBlueClose extends OpMode {
 
-    Servo wristLeft, wristRight, latchLeft, latchRight, planeLatch, intakeLeft, intakeRight;;
-    DcMotorEx linkageMotorLeft, linkageMotorRight;
-    VisionPortal vp;
-    TfodProcessor tf;
-
-    ElapsedTime pain = new ElapsedTime();
-
-    @SuppressLint("SdCardPath")
-    public static final String TFOD_MODEL_ASSET = "/sdcard/FIRST/tflitemodels/BlooBoi_Proto.tflite";
-    public static final String[] LABELS = {"BLooboi"};
+    int estimatedGameElementPosition;
+    int pos1Votes = 0;
+    int pos2Votes = 0;
+    int pos3Votes = 0;
 
     @Override
     public void init() {
         Robot.initializeSubsystems(hardwareMap);
+    }
 
-        /*
-        linkageMotorLeft = hardwareMap.get(DcMotorEx.class, "linkageMotorLeft");
-        linkageMotorRight = hardwareMap.get(DcMotorEx.class, "linkageMotorRight");
-        intakeLeft = hardwareMap.get(Servo.class, "intakeLeft");
-        intakeRight = hardwareMap.get(Servo.class, "intakeRight");
-        wristLeft = hardwareMap.get(Servo.class, "wristLeft");
-        wristRight = hardwareMap.get(Servo.class, "wristRight");
-        latchLeft = hardwareMap.get(Servo.class, "latchLeft");
-        latchRight = hardwareMap.get(Servo.class, "latchRight");
-        planeLatch = hardwareMap.get(Servo.class, "planeLatch");
-
-
-
-        wristRight.setDirection(Servo.Direction.FORWARD);
-        wristLeft.setDirection(Servo.Direction.REVERSE);
-
-        latchRight.setDirection(Servo.Direction.FORWARD);
-        latchLeft.setDirection(Servo.Direction.REVERSE);
-
-        intakeRight.setDirection(Servo.Direction.FORWARD);
-        intakeLeft.setDirection(Servo.Direction.REVERSE);
-
-        linkageMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkageMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        linkageMotorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        linkageMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkageMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        linkageMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        linkageMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkageMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-
-        tf = new TfodProcessor.Builder()
-                .setModelFileName(TFOD_MODEL_ASSET)
-                .setModelLabels(LABELS)
-                .setMaxNumRecognitions(1)
-                .build();
-        tf.setMinResultConfidence(0.8f);
-
-        vp = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "cam1"))
-                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .setCameraResolution(new Size(640, 480))
-                .enableLiveView(false)
-                .addProcessor(tf)
-                .build();
-
-
-         */
-
+    @Override
+    public void init_loop() {
+        int currentEstimatedPos = CameraArray.getGameElementPosition();
+        switch(currentEstimatedPos) {
+            case 1:
+                pos1Votes++;
+                break;
+            case 2:
+                pos2Votes++;
+                break;
+            case 3:
+                pos3Votes++;
+                break;
+        }
     }
 
     @Override
     public void start() {
+
+        if(pos1Votes > pos2Votes && pos1Votes > pos3Votes) {
+            estimatedGameElementPosition = 1;
+        } else if(pos2Votes > pos1Votes && pos1Votes > pos3Votes) {
+            estimatedGameElementPosition = 2;
+        } else if(pos3Votes > pos1Votes && pos1Votes > pos2Votes) {
+            estimatedGameElementPosition = 3;
+        }
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         Drivetrain.drivetrain.setPoseEstimate(startPose);
@@ -107,7 +72,7 @@ public class CompetitionAutonomousBlueClose extends OpMode {
         /* Defines a filler int variable that will be which tape that the pickle starts at.
         1 is the tape straight ahead, 2 is to the left, 3 is to the right (This is just for testing)
         */
-        int tapePos = 1;
+        int tapePos = 3;
 
 
         TrajectorySequence trajCenter = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
@@ -125,7 +90,7 @@ public class CompetitionAutonomousBlueClose extends OpMode {
                 .forward(20)
                 .setTurnConstraint(10, 1)
                 .turn(Math.toRadians(90))
-                .forward(23)
+                .forward(20)
                 .back(10)
                 .build();
 
@@ -133,27 +98,16 @@ public class CompetitionAutonomousBlueClose extends OpMode {
         switch (tapePos) {
             case 1:
                 Drivetrain.drivetrain.followTrajectorySequence(trajCenter);
+                break;
             case 2:
                 Drivetrain.drivetrain.followTrajectorySequence(trajLeft);
+                break;
             case 3:
                 Drivetrain.drivetrain.followTrajectorySequence(trajRight);
-
+                break;
         }
     }
 
     @Override
-    public void loop() {
-
-    }
-
-        /*
-        Drivetrain.drivetrain.followTrajectory(traj1);
-        PickleAccumulator.openIntake();
-        telemetry.addData("position", Drivetrain.drivetrain.getPoseEstimate());
-        telemetry.update();
-        //Drivetrain.drivetrain.followTrajectory(traj2);
-        telemetry.addData("position", Drivetrain.drivetrain.getPoseEstimate());
-        telemetry.update();
-        */
-
+    public void loop() {}
 }
