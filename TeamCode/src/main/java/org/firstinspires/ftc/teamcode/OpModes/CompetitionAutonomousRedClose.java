@@ -26,7 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 @Autonomous
-public class CompetitionAutonomousLeft extends OpMode {
+public class CompetitionAutonomousRedClose extends OpMode {
 
     Servo wristLeft, wristRight, latchLeft, latchRight, planeLatch, intakeLeft, intakeRight;;
     DcMotorEx linkageMotorLeft, linkageMotorRight;
@@ -99,7 +99,8 @@ public class CompetitionAutonomousLeft extends OpMode {
     }
 
     @Override
-    public void start(){
+    public void start() {
+
         Pose2d startPose = new Pose2d(0, 0, 0);
         Drivetrain.drivetrain.setPoseEstimate(startPose);
 
@@ -109,31 +110,18 @@ public class CompetitionAutonomousLeft extends OpMode {
         int tapePos = 1;
 
 
-        // A switch statement that will run a different trajectory based on the Tape
-        /*
-        switch (tapePos) {
-            case 1:
-                Drivetrain.drivetrain.followTrajectory(traj1);
-            case 2:
-                Drivetrain.drivetrain.turn(Math.toRadians(45));
-                Drivetrain.drivetrain.followTrajectory(traj1);
-            case 3:
-                Drivetrain.drivetrain.turn(Math.toRadians(-45));
-                Drivetrain.drivetrain.followTrajectory(traj1);
-        */
-
-        TrajectorySequence traj1 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajCenter = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
                 .forward(35)
                 .build();
 
-        TrajectorySequence traj2 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajLeft = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
                 .forward(30)
                 .strafeRight(40)
                 .forward(20)
                 .strafeLeft(40)
                 .build();
 
-        TrajectorySequence traj3 = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajRight = Drivetrain.drivetrain.trajectorySequenceBuilder(startPose)
                 .forward(20)
                 .setTurnConstraint(10, 1)
                 .turn(Math.toRadians(-90))
@@ -141,23 +129,20 @@ public class CompetitionAutonomousLeft extends OpMode {
                 .back(10)
                 .build();
 
-
-        Drivetrain.drivetrain.followTrajectorySequence(traj1);
-        //Drivetrain.drivetrain.setWeightedDrivePower(new Pose2d(0, 0, 1));
-        //Drivetrain.drivetrain.turn(Math.toRadians(90));
-        //Drivetrain.drivetrain.followTrajectory(traj2);
-
-        //Drivetrain.drivetrain.followTrajectory(traj1);
-
-        //Drivetrain.drivetrain.turn(Math.toRadians(-45));
-        //Drivetrain.drivetrain.followTrajectory(traj1);
+        // A switch statement that will run a different trajectory based on the Tape
+        switch (tapePos) {
+            case 1:
+                Drivetrain.drivetrain.followTrajectorySequence(trajCenter);
+            case 2:
+                Drivetrain.drivetrain.followTrajectorySequence(trajLeft);
+            case 3:
+                Drivetrain.drivetrain.followTrajectorySequence(trajRight);
 
         }
+    }
 
     @Override
     public void loop() {
-
-    }
 
         /*
         Drivetrain.drivetrain.followTrajectory(traj1);
@@ -168,5 +153,5 @@ public class CompetitionAutonomousLeft extends OpMode {
         telemetry.addData("position", Drivetrain.drivetrain.getPoseEstimate());
         telemetry.update();
         */
-
+    }
 }
